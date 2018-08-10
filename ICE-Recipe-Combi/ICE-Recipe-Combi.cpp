@@ -9,9 +9,9 @@ using namespace std;
 int main()
 {
 	std::ifstream file("ICE-CombisDB.csv");
-	IngredientList test(file);
-	Recipe<3> AppleJuice({ test.getIngredient("Nori"),test.getIngredient("Rice"),test.getIngredient("Oranggge") });
-	cout <<AppleJuice.calcBonus();
+	RecipeFinder test = IngredientList(file);
+	const Recipe<3> AppleJuice({ test.getIngredient("Nori"),test.getIngredient("Rice"),test.getIngredient("Oranggge") });
+	cout << test.calcBonus(AppleJuice);
 	cout << "Hello CMake." << endl;
 	return 0;
 }

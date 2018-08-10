@@ -6,22 +6,21 @@
 #include <vector>
 
 template<int N>
-class Recipe
+struct Recipe
 {
 	const std::array<IngredientRef, N> ingredients_;
 
-public:
 	Recipe(const std::array<IngredientRef, N> ingredients) :ingredients_(ingredients) {}
 	Recipe<N + 1> AddIngredient(IngredientRef ingredient);
-	int calcBonus() const;
 };
 
-class RecipeFinder
+class RecipeFinder: public IngredientList
 {
-	IngredientList ingredients_;
 
 public:
-	RecipeFinder(IngredientList ingredients) : ingredients_(std::move(ingredients)) {}
+	RecipeFinder(IngredientList ingredients) : IngredientList(ingredients){}
+	template<int N>
+	int calcBonus(const Recipe<N>& recipe) const;
 };
 
 
@@ -35,15 +34,13 @@ Recipe<N + 1> Recipe<N>::AddIngredient(IngredientRef ingredient)
 }
 
 template <int N>
-int Recipe<N>::calcBonus() const
+int RecipeFinder::calcBonus(const Recipe<N>& recipe) const
 {
 	int bonus = 0;
-	for (auto ingredient1 = ingredients_.begin(); ingredient1 != ingredients_.end(); ++ingredient1)
+	for (auto ingredient1 = recipe.ingredients_.begin(); ingredient1 != recipe.ingredients_.end(); ++ingredient1)
 	{
-		if (*ingredient1)
-			for (auto ingredient2 = ingredient1 + 1; ingredient2 != ingredients_.end(); ++ingredient2)
-				if (*ingredient2)
-					bonus += (*ingredient1)->findBonus(**ingredient2);
+			for (auto ingredient2 = ingredient1 + 1; ingredient2 != recipe.ingredients_.end(); ++ingredient2)
+					bonus += findBonus(*ingredient1,*ingredient2);
 	}
 	return bonus * 2;
 }
