@@ -13,6 +13,7 @@ struct IngredientRef
 };
 class IngredientList
 {
+protected:
 	std::array<std::string,128> ingredient_names_;
 	std::unordered_map<std::string, IngredientRef> ingredient_names_map_;
 	std::array<std::array<int8_t, 128>, 128> ingredient_combis_;
